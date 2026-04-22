@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Game Wiki - Local Version</title>
+    <title>Game Wiki - Cloud Sync</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
@@ -18,34 +18,30 @@
             from { transform: translateY(20px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
-        input, select, textarea { font-size: 16px !important; }
-        #form-container::-webkit-scrollbar { width: 4px; }
-        #form-container::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
     </style>
 </head>
 <body class="pb-24 md:pb-8 p-4 md:p-8">
 
     <div id="app" class="max-w-6xl mx-auto">
-        <!-- Header -->
         <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
             <div>
-                <h1 class="text-2xl md:text-3xl font-bold text-slate-800">🎮 Game Wiki</h1>
-                <p class="text-slate-500 text-sm">Локальна база (зберігається в браузері)</p>
-                <div class="text-[10px] font-mono mt-1 text-green-600 bg-green-50 inline-block px-2 py-0.5 rounded">Offline Mode (LocalStorage)</div>
+                <h1 class="text-2xl md:text-3xl font-bold text-slate-800">🎮 HayDay Info</h1>
+                <p class="text-slate-500 text-sm">Хмарна синхронізація активована 🚀</p>
+                <div id="sync-status" class="text-[10px] font-mono mt-1 text-blue-600 bg-blue-50 inline-block px-2 py-0.5 rounded">Підключення...</div>
             </div>
             <button onclick="toggleForm()" class="hidden md:block bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-xl font-semibold transition-all shadow-lg shadow-blue-200">
                 + Додати об'єкт
             </button>
         </header>
 
-        <!-- Mobile Button -->
+        <!-- Кнопка для мобільних пристроїв -->
         <div class="fixed bottom-6 left-0 right-0 px-6 z-40 md:hidden">
-            <button onclick="toggleForm()" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold shadow-2xl shadow-blue-400 flex items-center justify-center gap-2 active:scale-95 transition-transform">
+            <button onclick="toggleForm()" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold shadow-2xl shadow-blue-400 flex items-center justify-center gap-2">
                 <span class="text-xl">+</span> Новий запис
             </button>
         </div>
 
-        <!-- Form Overlay -->
+        <!-- Форма запису -->
         <div id="form-container" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-end md:items-center justify-center p-0 md:p-4">
             <div class="bg-white rounded-t-3xl md:rounded-2xl shadow-2xl w-full max-w-2xl p-6 overflow-y-auto max-h-[92vh] slide-up">
                 <div class="flex justify-between items-center mb-6">
@@ -62,7 +58,7 @@
                         </div>
                         <div>
                             <label class="block text-xs font-bold text-slate-500 uppercase mb-1 ml-1">Тип</label>
-                            <select id="type" onchange="handleTypeChange()" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none appearance-none">
+                            <select id="type" onchange="handleTypeChange()" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
                                 <option value="building">🏠 Будівля</option>
                                 <option value="product">📦 Продукт</option>
                             </select>
@@ -71,8 +67,8 @@
 
                     <div id="product-only-fields" class="hidden space-y-4">
                         <div>
-                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1 ml-1">Де виготовляється? (Будівля)</label>
-                            <input list="buildings-datalist" id="produced-in" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none" placeholder="Оберіть будівлю...">
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1 ml-1">Де виготовляється?</label>
+                            <input list="buildings-datalist" id="produced-in" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl" placeholder="Оберіть будівлю...">
                             <datalist id="buildings-datalist"></datalist>
                         </div>
                     </div>
@@ -107,8 +103,8 @@
                         </div>
                     </div>
 
-                    <div id="recipe-section" class="hidden space-y-3 pt-2">
-                        <label class="block text-xs font-bold text-slate-500 uppercase">Рецепт (інгредієнти)</label>
+                    <div id="recipe-section" class="hidden space-y-3">
+                        <label class="block text-xs font-bold text-slate-500 uppercase">Інгредієнти</label>
                         <div id="ingredients-list" class="space-y-2"></div>
                         <button type="button" onclick="addIngredientRow()" class="w-full py-3 border-2 border-dashed border-slate-200 rounded-xl text-blue-600 text-sm font-bold">
                             + Додати інгредієнт
@@ -116,14 +112,13 @@
                     </div>
 
                     <div class="pt-4 flex gap-3">
-                        <button type="button" onclick="toggleForm()" class="flex-1 py-4 bg-slate-100 text-slate-600 rounded-xl font-bold md:hidden">Скасувати</button>
-                        <button type="submit" class="flex-[2] bg-blue-600 text-white py-4 rounded-xl font-bold shadow-lg">Зберегти</button>
+                        <button type="submit" class="w-full bg-blue-600 text-white py-4 rounded-xl font-bold shadow-lg">Зберегти</button>
                     </div>
                 </form>
             </div>
         </div>
 
-        <!-- Lists -->
+        <!-- Списки об'єктів -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <section>
                 <h2 class="text-lg font-bold text-slate-800 mb-4">🏠 Будівлі</h2>
@@ -136,13 +131,50 @@
         </div>
     </div>
 
-    <script>
-        // Ініціалізація даних з LocalStorage
-        let entries = JSON.parse(localStorage.getItem('game_wiki_data')) || [];
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, updateDoc, doc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        function saveData() {
-            localStorage.setItem('game_wiki_data', JSON.stringify(entries));
-            renderAll();
+        // Твої дані з Firebase Console (вже вставлені)
+        const firebaseConfig = {
+            apiKey: "AIzaSyAdq60lkAvuPK7Z9yEipmcdWLVyZ6q-ys4",
+            authDomain: "game-hayday-wiki.firebaseapp.com",
+            projectId: "game-hayday-wiki",
+            storageBucket: "game-hayday-wiki.firebasestorage.app",
+            messagingSenderId: "404308051704",
+            appId: "1:404308051704:web:2fcc9a2233455fadc79d0d",
+            measurementId: "G-WRQXGBZFMF"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const appId = 'hayday-wiki-v1';
+
+        let entries = [];
+
+        // Анонімний вхід для синхронізації
+        signInAnonymously(auth).then(() => {
+            document.getElementById('sync-status').innerText = "Підключено до хмари ☁️";
+            setupListener();
+        }).catch(err => {
+            document.getElementById('sync-status').innerText = "Помилка доступу ❌";
+            console.error(err);
+        });
+
+        function setupListener() {
+            // Шлях до даних у Firestore
+            const colRef = collection(db, 'artifacts', appId, 'public', 'data', 'wiki');
+            onSnapshot(colRef, (snapshot) => {
+                entries = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+                renderAll();
+            }, (err) => {
+                console.error("Firestore error:", err);
+                if(err.code === 'permission-denied') {
+                    document.getElementById('sync-status').innerText = "Перевірте Rules у Firebase 🔒";
+                }
+            });
         }
 
         function renderAll() {
@@ -156,11 +188,7 @@
             const buildings = entries.filter(e => e.type === 'building');
             const products = entries.filter(e => e.type === 'product');
 
-            // Оновлюємо список будівель для вибору в продуктах
             bDatalist.innerHTML = buildings.map(b => `<option value="${b.name}">`).join('');
-
-            if (buildings.length === 0) bList.innerHTML = '<div class="p-8 text-center text-slate-400 bg-white rounded-2xl border border-dashed italic">Будівель ще немає</div>';
-            if (products.length === 0) pList.innerHTML = '<div class="p-8 text-center text-slate-400 bg-white rounded-2xl border border-dashed italic">Продуктів ще немає</div>';
 
             buildings.forEach(item => bList.appendChild(createCard(item)));
             products.forEach(item => pList.appendChild(createCard(item)));
@@ -168,22 +196,13 @@
 
         function createCard(item) {
             const div = document.createElement('div');
-            div.className = "card-gradient p-5 rounded-2xl border border-slate-200 shadow-sm relative group mb-3 slide-up";
+            div.className = "card-gradient p-5 rounded-2xl border border-slate-200 shadow-sm mb-3 slide-up";
             
             let extra = '';
             if (item.type === 'product') {
                 if (item.producedIn) extra += `<div class="mt-2 text-[11px] font-bold text-orange-600 bg-orange-50 px-2 py-1 rounded-lg inline-block">🏠 В: ${item.producedIn}</div>`;
                 if (item.ingredients?.length) {
-                    extra += `<div class="mt-3 pt-3 border-t border-slate-100 flex flex-wrap gap-1">
-                        ${item.ingredients.map(ing => `<span class="bg-blue-50 text-blue-700 text-[10px] px-2 py-1 rounded-lg border border-blue-100">${ing.amount}× ${ing.name}</span>`).join('')}
-                    </div>`;
-                }
-            } else {
-                const prodInB = entries.filter(e => e.type === 'product' && e.producedIn === item.name);
-                if (prodInB.length > 0) {
-                    extra += `<div class="mt-3 pt-3 border-t border-slate-100 flex flex-wrap gap-1">
-                        ${prodInB.map(p => `<span class="bg-green-50 text-green-700 text-[10px] px-2 py-1 rounded-lg border border-green-100">📦 ${p.name}</span>`).join('')}
-                    </div>`;
+                    extra += `<div class="mt-3 pt-3 border-t border-slate-100 flex flex-wrap gap-1">${item.ingredients.map(ing => `<span class="bg-blue-50 text-blue-700 text-[10px] px-2 py-1 rounded-lg border border-blue-100">${ing.amount}× ${ing.name}</span>`).join('')}</div>`;
                 }
             }
 
@@ -191,60 +210,58 @@
                 <div class="flex justify-between items-start mb-2">
                     <h3 class="font-bold text-slate-800">${item.name}</h3>
                     <div class="flex gap-2">
-                        <button onclick="editEntry('${item.id}')" class="text-blue-500 bg-blue-50 p-1.5 rounded-lg text-xs">✏️</button>
-                        <button onclick="deleteEntry('${item.id}')" class="text-red-500 bg-red-50 p-1.5 rounded-lg text-xs">🗑️</button>
+                        <button class="edit-btn text-blue-500 bg-blue-50 p-1.5 rounded-lg text-xs" data-id="${item.id}">✏️</button>
+                        <button class="del-btn text-red-500 bg-red-50 p-1.5 rounded-lg text-xs" data-id="${item.id}">🗑️</button>
                     </div>
                 </div>
                 <div class="grid grid-cols-2 gap-1 text-[11px] text-slate-500">
-                    <div>⭐ <b>${item.level}</b> рвн.</div>
-                    <div>✨ <b>${item.exp}</b> XP</div>
-                    <div>💰 <b>${item.coins}</b> мон.</div>
-                    <div>💎 <b>${item.diamonds}</b> алм.</div>
-                    <div class="col-span-2">⏱️ <b>${item.time}</b> (3⭐: ${item.time3stars || '-'})</div>
+                    <div>⭐ Рівень: ${item.level}</div>
+                    <div>✨ XP: ${item.exp}</div>
+                    <div>💰 Монети: ${item.coins}</div>
+                    <div class="col-span-2">⏱️ Час: ${item.time}</div>
                 </div>
                 ${extra}
             `;
+
+            div.querySelector('.edit-btn').onclick = () => editEntry(item.id);
+            div.querySelector('.del-btn').onclick = () => deleteEntry(item.id);
             return div;
         }
 
-        function toggleForm(isEdit = false) {
+        window.toggleForm = (isEdit = false) => {
             const container = document.getElementById('form-container');
             if (!isEdit) {
                 document.getElementById('wiki-form').reset();
                 document.getElementById('edit-id').value = '';
-                document.getElementById('form-title').innerText = 'Новий запис';
                 document.getElementById('ingredients-list').innerHTML = '';
             }
             container.classList.toggle('hidden');
             handleTypeChange();
-        }
+        };
 
-        function handleTypeChange() {
+        window.handleTypeChange = () => {
             const type = document.getElementById('type').value;
             document.getElementById('recipe-section').classList.toggle('hidden', type !== 'product');
             document.getElementById('product-only-fields').classList.toggle('hidden', type !== 'product');
-        }
+        };
 
-        function addIngredientRow(name = '', amount = 1) {
+        window.addIngredientRow = (name = '', amount = 1) => {
             const container = document.getElementById('ingredients-list');
             const row = document.createElement('div');
             row.className = "ingredient-row flex gap-2 items-center";
-            const products = entries.filter(e => e.type === 'product').map(e => e.name);
-            
             row.innerHTML = `
-                <input list="prods-list" class="ing-select flex-1 p-2 bg-slate-50 border rounded-lg text-sm" placeholder="Що..." value="${name}">
-                <datalist id="prods-list">${[...new Set(products)].map(p => `<option value="${p}">`).join('')}</datalist>
+                <input class="ing-select flex-1 p-2 bg-slate-50 border rounded-lg text-sm" placeholder="Що..." value="${name}">
                 <input type="number" class="ing-amount w-16 p-2 bg-slate-50 border rounded-lg text-sm font-bold" value="${amount}">
-                <button type="button" onclick="this.parentElement.remove()" class="text-red-400 p-2">✕</button>
+                <button type="button" class="text-red-400 p-2 remove-ing">✕</button>
             `;
+            row.querySelector('.remove-ing').onclick = () => row.remove();
             container.appendChild(row);
-        }
+        };
 
-        function editEntry(id) {
+        async function editEntry(id) {
             const item = entries.find(e => e.id === id);
             if (!item) return;
             document.getElementById('edit-id').value = id;
-            document.getElementById('form-title').innerText = 'Редагувати';
             document.getElementById('name').value = item.name;
             document.getElementById('type').value = item.type;
             document.getElementById('level').value = item.level;
@@ -253,63 +270,60 @@
             document.getElementById('diamonds').value = item.diamonds;
             document.getElementById('time').value = item.time;
             document.getElementById('time3stars').value = item.time3stars || '';
-            
             if (item.type === 'product') {
                 document.getElementById('produced-in').value = item.producedIn || '';
                 document.getElementById('ingredients-list').innerHTML = '';
                 (item.ingredients || []).forEach(ing => addIngredientRow(ing.name, ing.amount));
             }
-            toggleForm(true);
+            window.toggleForm(true);
         }
 
-        function deleteEntry(id) {
-            if(confirm('Видалити?')) {
-                entries = entries.filter(e => e.id !== id);
-                saveData();
+        async function deleteEntry(id) {
+            if(confirm('Видалити цей запис?')) {
+                await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'wiki', id));
             }
         }
 
-        document.getElementById('wiki-form').onsubmit = (e) => {
+        document.getElementById('wiki-form').onsubmit = async (e) => {
             e.preventDefault();
             const editId = document.getElementById('edit-id').value;
             const type = document.getElementById('type').value;
-            
             const ingredients = [];
             if (type === 'product') {
                 document.querySelectorAll('.ingredient-row').forEach(row => {
                     const name = row.querySelector('.ing-select').value;
                     const amount = row.querySelector('.ing-amount').value;
-                    if(name) ingredients.push({ name, amount });
+                    if(name) ingredients.push({ name, amount: Number(amount) });
                 });
             }
 
-            const data = {
-                id: editId || Date.now().toString(),
+            const payload = {
                 name: document.getElementById('name').value,
-                type: type,
-                level: document.getElementById('level').value,
-                exp: document.getElementById('exp').value,
-                coins: document.getElementById('coins').value,
-                diamonds: document.getElementById('diamonds').value,
+                type,
+                level: Number(document.getElementById('level').value),
+                exp: Number(document.getElementById('exp').value),
+                coins: Number(document.getElementById('coins').value),
+                diamonds: Number(document.getElementById('diamonds').value),
                 time: document.getElementById('time').value,
                 time3stars: document.getElementById('time3stars').value,
                 producedIn: type === 'product' ? document.getElementById('produced-in').value : '',
-                ingredients: ingredients
+                ingredients,
+                updatedAt: serverTimestamp()
             };
 
-            if (editId) {
-                const index = entries.findIndex(e => e.id === editId);
-                entries[index] = data;
-            } else {
-                entries.push(data);
+            const colRef = collection(db, 'artifacts', appId, 'public', 'data', 'wiki');
+            try {
+                if (editId) {
+                    await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'wiki', editId), payload);
+                } else {
+                    await addDoc(colRef, payload);
+                }
+                window.toggleForm();
+            } catch (err) {
+                console.error("Save error:", err);
+                alert("Помилка при збереженні. Перевірте правила Firestore!");
             }
-
-            saveData();
-            toggleForm();
         };
-
-        // Запуск
-        renderAll();
     </script>
 </body>
 </html>
